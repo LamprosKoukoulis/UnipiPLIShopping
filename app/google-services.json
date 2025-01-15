@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "628358090837",
+    "project_id": "unipiplishopping-db",
+    "storage_bucket": "unipiplishopping-db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628358090837:android:f84c8f073db0f6c7fb04dc",
+        "android_client_info": {
+          "package_name": "com.example.unipiplishopping"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDp0VqPupwJANzPZV_xsmLk9KaRzzhiMNg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,140 @@
+package com.example.unipiplishopping;
+
+import android.app.AlertDialog;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements LocationListener{
+    private DatabaseReference reference;
+    private LocationManager locationManager;
+    private RecyclerView recyclerView;
+    private ProductAdapter adapter;
+    private String customerEmail;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        customerEmail = getIntent().getStringExtra("customerEmail");
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        reference = FirebaseDatabase.getInstance().getReference("products");
+        read();
+        //locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+    }
+
+    public void read(){
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Product> productList =new ArrayList<>();
+
+                for(DataSnapshot data: snapshot.getChildren()){
+                    String id = data.child("id").getValue(String.class);
+                    String title = data.child("title").getValue(String.class);
+                    String description = data.child("description").getValue(String.class);
+                    String releaseDate = data.child("releaseDate").getValue(String.class);
+                    String price = data.child("price").getValue(String.class);
+                    String location = data.child("location").getValue(String.class);
+                    Product product = new Product(id, title, description, releaseDate, price, location);
+                    productList.add(product);
+                    //Log.d("FirebaseProduct","Product Loaded:" + product.toString());
+                }
+                adapter = new ProductAdapter(productList);
+                recyclerView.setAdapter(adapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                showToast("Δε βρέθηκαν δεδομένα");
+            }
+        });
+    }
+
+    public void placeOrder(View view){
+
+        DatabaseReference reference2= FirebaseDatabase.getInstance().getReference().child("orders");
+        List<Product> selectedProducts = adapter.getSelectedProducts();
+        List<String> productsId=new ArrayList<>();
+
+        if(selectedProducts.isEmpty()){
+            showToast("Δεν υπάρχουν προιόντα στο καλάθι");
+            return;
+        }
+
+        selectedProducts.forEach(product -> productsId.add(product.getId()));
+
+        Order order= new Order(customerEmail,productsId);
+
+        String orderId= reference2.push().getKey(); //Generate orderId
+        if(orderId!=null & customerEmail!=null){
+            reference2.child(orderId).setValue(order).addOnCompleteListener(task -> {
+             if(task.isSuccessful()) {
+                showToast("Η παραγγελία καταχωρήθηκε");
+                showSuccessfulOrder(selectedProducts);
+                selectedProducts.clear();
+             }else{
+                 showToast("Σφάλμα κατα την ολοκλήρωση της παραγγελίας");
+             }
+            });
+        }else{
+            showToast("Σφάλμα κατα την ολοκλήρωση της παραγγελίας");
+        }
+    }
+    private void showToast(String info){
+        Toast.makeText(MainActivity.this,info,Toast.LENGTH_SHORT).show();
+    }
+    public void showSuccessfulOrder(List<Product> selectedProductIds){
+                StringBuilder builder = new StringBuilder();
+                for (Product product : selectedProductIds) {
+                    builder.append(product.getTitle() + "\n");
+                }
+                // Show an alert dialog with the product Title/s
+                new AlertDialog.Builder(this)
+                        .setTitle("Η Παραγγελία Ολοκληρώθηκε!")
+                        .setMessage(builder.toString())
+                        .show();
+    }
+    //public void gps(View view) {
+    //    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    //        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
+    //        return;
+    //    }
+    //    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,this);
+    //    locationManager.removeUpdates(this);
+    //}
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        //recyclerView.setText(location.getLatitude()+","+location.getLongitude());
+    }
+}
