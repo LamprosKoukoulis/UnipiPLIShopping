@@ -1,6 +1,7 @@
 package com.example.unipiplishopping;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,12 +28,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LocationListener{
+public class MainActivity extends Settings implements LocationListener{
     private DatabaseReference reference;
     private LocationManager locationManager;
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
     private String customerEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -44,14 +46,35 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        customerEmail = getIntent().getStringExtra("customerEmail");
 
+        applyFontSize(findViewById(android.R.id.content));
+
+        customerEmail = getIntent().getStringExtra("customerEmail");
+        if (customerEmail == null) {
+        Log.e("MainActivity", "customerEmail is null!");
+        showToast("Failed to retrieve customer email.");
+        return;
+    }
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         reference = FirebaseDatabase.getInstance().getReference("products");
         read();
+        View buttonSettings=findViewById(R.id.buttonSettings);
+        buttonSettings.setOnClickListener(view -> {
+            Intent intent= new Intent(MainActivity.this,Settings.class);
+            startActivity(intent);
+        });
+
         //locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isDarkMode = preferences.getBoolean("darkMode",false);
+        applyFontSize(findViewById(android.R.id.content));
+        applyDarkMode();
+        read();
     }
 
     public void read(){
@@ -59,19 +82,21 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Product> productList =new ArrayList<>();
-
                 for(DataSnapshot data: snapshot.getChildren()){
-                    String id = data.child("id").getValue(String.class);
-                    String title = data.child("title").getValue(String.class);
-                    String description = data.child("description").getValue(String.class);
-                    String releaseDate = data.child("releaseDate").getValue(String.class);
-                    String price = data.child("price").getValue(String.class);
-                    String location = data.child("location").getValue(String.class);
-                    Product product = new Product(id, title, description, releaseDate, price, location);
-                    productList.add(product);
-                    //Log.d("FirebaseProduct","Product Loaded:" + product.toString());
+                    try{
+                        String id = data.child("id").getValue(String.class);
+                        String title = data.child("title").getValue(String.class);
+                        String description = data.child("description").getValue(String.class);
+                        String releaseDate = data.child("releaseDate").getValue(String.class);
+                        String price = data.child("price").getValue(String.class);
+                        String location = data.child("location").getValue(String.class);
+                        Product product = new Product(id, title, description, releaseDate, price, location);
+                        productList.add(product);
+                    }catch(Exception e){
+                        Log.d("FirebaseRead","Error reading product data",e);
+                    }
                 }
-                adapter = new ProductAdapter(productList);
+                adapter = new ProductAdapter(MainActivity.this,productList);
                 recyclerView.setAdapter(adapter);
             }
             @Override
@@ -95,11 +120,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         selectedProducts.forEach(product -> productsId.add(product.getId()));
 
         Order order= new Order(customerEmail,productsId);
-
         String orderId= reference2.push().getKey(); //Generate orderId
         if(orderId!=null & customerEmail!=null){
             reference2.child(orderId).setValue(order).addOnCompleteListener(task -> {
-             if(task.isSuccessful()) {
+            if(task.isSuccessful()) {
                 showToast("Η παραγγελία καταχωρήθηκε");
                 showSuccessfulOrder(selectedProducts);
                 selectedProducts.clear();
