@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="noDataFound">Aucune donnée trouvée</string>
+    <string name="failedToRetrieveEmail">Échec de la récupération de l\'e-mail du client</string>
+    <string name="noProductsInCart">Aucun produit dans le panier</string>
+    <string name="orderRegistered">Commande enregistrée avec succès</string>
+    <string name="orderCompletionError">Erreur lors de la finalisation de la commande</string>
+    <string name="OrderCompletedTitle">Commande terminée !</string>
+    <string name="emailHint">e-mail</string>
+    <string name="passwordHint">mot de passe</string>
+    <string name="signupButton">S\'inscrire</string>
+    <string name="signinButton">Se connecter</string>
+    <string name="settingsButton">Paramètres</string>
+    <string name="placeOrderButton">Passer la commande</string>
+    <string name="AlreadyInCart">L\'article est déjà ajouté !</string>
+    <string name="AddedToCart">Article ajouté au panier</string>
+    <string name="darkModeOn">Mode sombre activé</string>
+    <string name="darkModeOff">Mode sombre désactivé</string>
+    <string name="changeColor">Mode sombre</string>
+    <string name="saveButton">Enregistrer les modifications</string>
+    <string name="SettingsText">Paramètres</string>
+    <string name="textViewName">Nom :</string>
+    <string name="textViewSurname">Prénom :</string>
+    <string name="textViewFontSize">Taille de la police :</string>
+    <string name="textView1">Titre :</string>
+    <string name="textView2">ID :</string>
+    <string name="textView3">Emplacement :</string>
+    <string name="textView4">Prix :</string>
+    <string name="textView5">Description :</string>
+    <string name="textView6">Date de sortie :</string>
+    <string name="addToOrderButton">Ajouter à la commande</string>
+    <string name="errorTitle">Erreur</string>
+    <string name="errorFillFields">Veuillez remplir tous les champs!</string>
+    <string name="failureTitle">Échec</string>
+    <string name="failureMessageInvalid">Données incorrectes</string>
+    <string name="successTitle">Succès</string>
+    <string name="successMessageStart">Commencez à explorer!</string>
+    <string name="userCreated">Utilisateur créé!</string>
+</resources>
