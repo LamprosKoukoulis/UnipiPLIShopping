@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="failedToRetrieveEmail">Δε βρέθηκε το email του Χρήστη</string>
+    <string name="noDataFound">Δε βρέθηκαν δεδομένα</string>
+    <string name="noProductsInCart">Δεν υπάρχουν προϊοντα στο καλάθι</string>
+    <string name="orderRegistered">Η παραγγελία καταχωρήθηκε</string>
+    <string name="orderCompletionError">Σφάλμα κατα την ολοκλήρωση της παραγγελίας</string>
+    <string name="OrderCompletedTitle">Η παραγγελία ολοκληρώθηκε</string>
+    <string name="emailHint">ηλεκτρονικό ταχυδρομείο</string>
+    <string name="passwordHint">κωδικός πρόσβασης</string>
+    <string name="signupButton">Εγγραφή</string>
+    <string name="signinButton">Σύνδεση</string>
+    <string name="settingsButton">Ρυθμίσεις</string>
+    <string name="placeOrderButton">Ολοκλήρωση Παραγγελίας</string>
+    <string name="AlreadyInCart">Το προιον είναι ήδη στο καλάθι</string>
+    <string name="AddedToCart">Το προιον προστεθηκε στο καλάθι</string>
+    <string name="darkModeOn">Ενεργοποιήθηκε η Νυχτερινή Λειτουργεία</string>
+    <string name="darkModeOff">Απενεργοποιήθηκε η Νυχτερινή Λειτουργεία</string>
+    <string name="changeColor">Σκοτεινή Λειτουργεία</string>
+    <string name="saveButton">Αποθήκευση Αλλαγών</string>
+    <string name="SettingsText">Ρυθμίσεις</string>
+    <string name="textViewName">Όνομα: </string>
+    <string name="textViewSurname">Επώνυμο:</string>
+    <string name="textViewFontSize">Μέγεθος \n Γραμματοσειράς:</string>
+    <string name="textView1">Τίτλος:</string>
+    <string name="textView2">ID:</string>
+    <string name="textView3">Τοποθεσία:</string>
+    <string name="textView4">Τιμή:</string>
+    <string name="textView5">Περιγραφή:</string>
+    <string name="textView6">Ημερομηνία Κυκλοφορίας:</string>
+    <string name="addToOrderButton">Προσθήκη στην Παραγγελία</string>
+    <string name="errorTitle">Σφάλμα</string>
+    <string name="errorFillFields">Συμπληρώστε Τα Πεδία!</string>
+    <string name="failureTitle">Αποτυχία</string>
+    <string name="failureMessageInvalid">Λανθασμένα Δεδομένα</string>
+    <string name="successTitle">Επιτυχία</string>
+    <string name="successMessageStart">Ξεκινήστε την περιήγηση!</string>
+    <string name="userCreated">Ο χρήστης δημιουργήθηκε!</string>
+</resources>
