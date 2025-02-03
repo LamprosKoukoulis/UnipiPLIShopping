@@ -1,3 +1,39 @@
 <resources>
-    <string name="app_name">UnipiPLIShopping</string>
+    <string name="app_name" translatable="false">UnipiPLIShopping</string>
+    <string name="noDataFound">No data was found</string>
+    <string name="failedToRetrieveEmail">Failed to retrievee customer email</string>
+    <string name="noProductsInCart">No products in cart</string>
+    <string name="orderRegistered">Order registered successfully</string>
+    <string name="orderCompletionError">Error completing the order</string>
+    <string name="OrderCompletedTitle">Order Completed!</string>
+    <string name="emailHint">e-mail</string>
+    <string name="passwordHint">password</string>
+    <string name="signupButton">Sign-up</string>
+    <string name="signinButton">Sign-in</string>
+    <string name="settingsButton">Settings</string>
+    <string name="placeOrderButton">Place Order</string>
+    <string name="AlreadyInCart">Item Is Added Already!</string>
+    <string name="AddedToCart">Item Added to Cart</string>
+    <string name="darkModeOn">Dark Mode Activated</string>
+    <string name="darkModeOff">Dark Mode Deactivated</string>
+    <string name="changeColor">Dark Mode</string>
+    <string name="saveButton">Save Changes</string>
+    <string name="SettingsText">Settings</string>
+    <string name="textViewName">Name:</string>
+    <string name="textViewSurname">Surname:</string>
+    <string name="textViewFontSize">Font Size:</string>
+    <string name="textView1">Title:</string>
+    <string name="textView2">ID:</string>
+    <string name="textView3">Location:</string>
+    <string name="textView4">Price:</string>
+    <string name="textView5">Description:</string>
+    <string name="textView6">Release Date:</string>
+    <string name="addToOrderButton">Add to Order</string>
+    <string name="errorTitle">Error</string>
+    <string name="errorFillFields">Please fill in all fields!</string>
+    <string name="failureTitle">Failure</string>
+    <string name="failureMessageInvalid">Invalid Data</string>
+    <string name="successTitle">Success</string>
+    <string name="successMessageStart">Start exploring!</string>
+    <string name="userCreated">User created!</string>
 </resources>

@@ -46,10 +46,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductViewHolder> {
         holder.location.setText(product.getLocation());
         holder.releaseDate.setText(product.getReleaseDate());
         holder.addToOrderButton.setOnClickListener(v->{
+            Context context=holder.itemView.getContext();
             if(selectedProducts.contains(product)) {
-                Toast.makeText(holder.itemView.getContext(), "Το προιον είναι ήδη στο καλάθι", Toast.LENGTH_SHORT).show();}
+                Toast.makeText(holder.itemView.getContext(),context.getString(R.string.AlreadyInCart), Toast.LENGTH_SHORT).show();}
             else {
-                Toast.makeText(holder.itemView.getContext(), "Το προιον προστέθηκε στο καλάθι", Toast.LENGTH_SHORT).show();
+                Toast.makeText(holder.itemView.getContext(), context.getString(R.string.AddedToCart), Toast.LENGTH_SHORT).show();
                 selectedProducts.add(product);
             }});
     }

@@ -1,6 +1,7 @@
 package com.example.unipiplishopping;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,7 +10,9 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
+import androidx.core.os.LocaleListCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
@@ -18,6 +21,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Locale;
 
 public class Login_Auth extends AppCompatActivity {
     EditText emailText,passwordText;
@@ -33,6 +38,7 @@ public class Login_Auth extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        setLocale();
         emailText = findViewById(R.id.editTextText);
         passwordText = findViewById(R.id.editTextTextPassword);
         auth = FirebaseAuth.getInstance();
@@ -49,17 +55,31 @@ public class Login_Auth extends AppCompatActivity {
                                 Intent intent = new Intent(Login_Auth.this, MainActivity.class);
                                 intent.putExtra("customerEmail",user.getEmail());
                                 startActivity(intent);
-                                showMessage("Επιτυχία","Ξεκινήστε την περιήγηση!");
+                                showMessage(getString(R.string.successTitle),getString(R.string.successMessageStart));
                             }else {
-                                showMessage("Αποτυχία","Λανθασμένα Δεδομένα");
+                                showMessage(getString(R.string.failureTitle),getString(R.string.failureMessageInvalid));
                             }
                         }
                     });
         }else {
-            showMessage("Error","Συμπληρώστε Τα Πεδία!");
+            showMessage(getString(R.string.errorTitle),getString(R.string.errorFillFields));
         }
 
         //auth.signOut();
+    }
+    public void setLocale(){
+        findViewById(R.id.button4).setOnClickListener(view -> {
+            Locale currentLocale=Locale.getDefault();
+            if(currentLocale.getLanguage().equals("el"))
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"));
+            else if (currentLocale.getLanguage().equals("en")) {
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("fr"));
+            } else if (currentLocale.getLanguage().equals("fr")) {
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("el"));
+            }else{
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags("en"));
+            }
+        });
     }
     public void signup(View view){
         if (!emailText.getText().toString().isEmpty()
@@ -70,14 +90,14 @@ public class Login_Auth extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
                                 user = auth.getCurrentUser();
-                                showMessage("Success","User created!");
+                                showMessage(getString(R.string.successTitle),getString(R.string.userCreated));
                             }else {
-                                showMessage("Error",task.getException().getLocalizedMessage());
+                                showMessage(getString(R.string.failureTitle),task.getException().getLocalizedMessage());
                             }
                         }
                     });
         }else {
-            showMessage("Error","Please provide data to the fields");
+            showMessage(getString(R.string.errorTitle),getString(R.string.errorFillFields));
         }
     }
     void showMessage(String title, String message){

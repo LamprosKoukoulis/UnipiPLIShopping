@@ -48,28 +48,27 @@ public class MainActivity extends Settings implements LocationListener{
         });
 
         applyFontSize(findViewById(android.R.id.content));
-
+        //Gets email from intent
         customerEmail = getIntent().getStringExtra("customerEmail");
         if (customerEmail == null) {
-        Log.e("MainActivity", "customerEmail is null!");
-        showToast("Failed to retrieve customer email.");
+        showToast(getString(R.string.failedToRetrieveEmail));
         return;
     }
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        reference = FirebaseDatabase.getInstance().getReference("products");
         read();
+        SettingsClickListener();
+
+        //locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+    }
+
+    private void SettingsClickListener(){
         View buttonSettings=findViewById(R.id.buttonSettings);
         buttonSettings.setOnClickListener(view -> {
             Intent intent= new Intent(MainActivity.this,Settings.class);
             startActivity(intent);
         });
-
-        //locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
     }
-
     @Override
-    protected void onResume() {
+    protected void onResume() {//update UI based on user preferences
         super.onResume();
         isDarkMode = preferences.getBoolean("darkMode",false);
         applyFontSize(findViewById(android.R.id.content));
@@ -77,7 +76,10 @@ public class MainActivity extends Settings implements LocationListener{
         read();
     }
 
-    public void read(){
+    public void read(){//Reads from db and creates Product
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        reference = FirebaseDatabase.getInstance().getReference("products");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -95,28 +97,27 @@ public class MainActivity extends Settings implements LocationListener{
                     }catch(Exception e){
                         Log.d("FirebaseRead","Error reading product data",e);
                     }
-                }
+                }//Using ProductAdapter populates recyclerView in MainAActivity
                 adapter = new ProductAdapter(MainActivity.this,productList);
                 recyclerView.setAdapter(adapter);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                showToast("Δε βρέθηκαν δεδομένα");
+                showToast(getString(R.string.noDataFound));
             }
         });
     }
 
     public void placeOrder(View view){
-
         DatabaseReference reference2= FirebaseDatabase.getInstance().getReference().child("orders");
         List<Product> selectedProducts = adapter.getSelectedProducts();
         List<String> productsId=new ArrayList<>();
 
         if(selectedProducts.isEmpty()){
-            showToast("Δεν υπάρχουν προιόντα στο καλάθι");
+            showToast(getString(R.string.noProductsInCart));
             return;
         }
-
+        //Get product(s) Id from product(s) in the cart
         selectedProducts.forEach(product -> productsId.add(product.getId()));
 
         Order order= new Order(customerEmail,productsId);
@@ -124,15 +125,15 @@ public class MainActivity extends Settings implements LocationListener{
         if(orderId!=null & customerEmail!=null){
             reference2.child(orderId).setValue(order).addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                showToast("Η παραγγελία καταχωρήθηκε");
+                showToast(getString(R.string.orderRegistered));
                 showSuccessfulOrder(selectedProducts);
                 selectedProducts.clear();
              }else{
-                 showToast("Σφάλμα κατα την ολοκλήρωση της παραγγελίας");
+                 showToast(getString(R.string.orderCompletionError));
              }
             });
         }else{
-            showToast("Σφάλμα κατα την ολοκλήρωση της παραγγελίας");
+            showToast(getString(R.string.orderCompletionError));
         }
     }
     private void showToast(String info){
@@ -145,7 +146,7 @@ public class MainActivity extends Settings implements LocationListener{
                 }
                 // Show an alert dialog with the product Title/s
                 new AlertDialog.Builder(this)
-                        .setTitle("Η Παραγγελία Ολοκληρώθηκε!")
+                        .setTitle(getString(R.string.orderRegistered))
                         .setMessage(builder.toString())
                         .show();
     }

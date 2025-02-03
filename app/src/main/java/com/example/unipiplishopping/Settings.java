@@ -81,7 +81,7 @@ public class Settings extends AppCompatActivity {
         editTextName.setText(name);
         editTextSurname.setText(surname);
         editTextNumber.setText(String.valueOf(fontSize));
-        Log.d("SettingsActivity", "Loaded preferences: name=" + name + ", surname=" + surname + ", fontSize=" + fontSize);
+        //Log.d("SettingsActivity", "Loaded preferences: name=" + name + ", surname=" + surname + ", fontSize=" + fontSize);
     }
 
     private void savePreferences(String name,String surname,int fontSize){
@@ -99,10 +99,10 @@ public class Settings extends AppCompatActivity {
         editor.apply();
 
         if(isDarkMode){
-            Toast.makeText(this,"Ενεργοποιήθηκε η Νυχτερινή Λειτουργεία",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.darkModeOn),Toast.LENGTH_SHORT).show();
             applyDarkMode();
         }else{
-            Toast.makeText(this,"Απενεργοποιήθηκε η Νυχτερινή Λειτουργεία",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.darkModeOff),Toast.LENGTH_SHORT).show();
             applyDarkMode();
         }
     }
